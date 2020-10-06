@@ -3,15 +3,15 @@ package main
 /*
 	qr generator
 	reference: https://github.com/golangkorea/effective-go/blob/master/a_web_server.md
- */
+*/
 
 import (
-	`flag`
-	`fmt`
-	`html/template`
-	`log`
-	`net/http`
-	`strconv`
+	"flag"
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+	"strconv"
 )
 
 var addr = flag.String("addr", ":1718", "http service address") // Q=17, R=18
@@ -19,6 +19,7 @@ var addr = flag.String("addr", ":1718", "http service address") // Q=17, R=18
 var templ = template.Must(template.New("qr").Parse(templateStr))
 
 var count = 0
+
 func main() {
 	flag.Parse()
 	http.Handle("/", http.HandlerFunc(QR))
@@ -30,7 +31,8 @@ func main() {
 
 func QR(w http.ResponseWriter, req *http.Request) {
 	count++
-	fmt.Printf(`'/' request's handler was called %s times.`, strconv.Itoa(count))
+	// TODO: QR Handler는 2번 호출된다. delete this problem.
+	fmt.Printf("'/' equest's handler was called %s times.\n", strconv.Itoa(count))
 	templ.Execute(w, req.FormValue("s"))
 }
 
